@@ -1,0 +1,99 @@
+EmployeesApp
+│
+├── App
+│   ├── EmployeesApp.swift
+│   ├── AppDIContainer.swift
+│   └── AppConfig.swift
+│
+├── Core
+│   ├── Errors
+│   │   └── AppError.swift
+│   │
+│   ├── Networking
+│   │   ├── APIClient.swift
+│   │   ├── URLSessionAPIClient.swift
+│   │   ├── Endpoint.swift
+│   │   └── EmployeesEndpoint.swift
+│   │
+│   ├── Monitoring
+│   │   └── NetworkMonitor.swift
+│   │
+│   ├── Extensions
+│   │   ├── JSONDecoder+Ext.swift
+│   │   └── DateFormatter+Ext.swift
+│   │
+│   └── Utilities
+│       └── Logger.swift
+│
+├── Domain
+│   ├── Entities
+│   │   └── Employee.swift
+│   │
+│   ├── Repositories
+│   │   └── EmployeeRepository.swift
+│   │
+│   └── UseCases
+│       ├── GetEmployeesUseCase.swift
+│       ├── GetEmployeeDetailsUseCase.swift
+│       └── SearchEmployeesUseCase.swift
+│
+├── Data
+│   ├── DTOs
+│   │   ├── EmployeesResponseDTO.swift
+│   │   ├── EmployeesDataDTO.swift
+│   │   ├── EmployeeDTO.swift
+│   │   └── LocationDTO.swift
+│   │
+│   ├── DataSources
+│   │   ├── Remote
+│   │   │   ├── EmployeeRemoteDataSource.swift
+│   │   │   └── EmployeeRemoteDataSourceImpl.swift
+│   │   │
+│   │   └── Local
+│   │       ├── EmployeeLocalDataSource.swift
+│   │       └── EmployeeCoreDataStorage.swift
+│   │
+│   └── Repositories
+│       └── EmployeeRepositoryImpl.swift
+│
+├── Persistence
+│   ├── CoreData
+│   │   ├── CoreDataStack.swift
+│   │   ├── EmployeesDB.xcdatamodeld
+│   │   └── Entities
+│   │       └── EmployeeEntity+Mapping.swift
+│   │
+│   └── Migrations
+│       └── (future)
+│
+├── Presentation
+│   ├── Home
+│   │   ├── HomeView.swift
+│   │   ├── HomeViewModel.swift
+│   │   ├── EmployeeRowView.swift
+│   │   └── HomeViewState.swift
+│   │
+│   ├── EmployeeDetails
+│   │   ├── EmployeeDetailsView.swift
+│   │   ├── EmployeeDetailsViewModel.swift
+│   │   └── EmployeeDetailsViewState.swift
+│   │
+│   └── Components
+│       ├── LoadingView.swift
+│       ├── ErrorView.swift
+│       └── EmptyStateView.swift
+│
+├── Resources
+│   ├── Assets.xcassets
+│   └── Localizable.strings
+│
+└── Tests
+    ├── DomainTests
+    │   └── GetEmployeesUseCaseTests.swift
+    │
+    ├── DataTests
+    │   └── EmployeeRepositoryTests.swift
+    │
+    └── PresentationTests
+        └── HomeViewModelTests.swift
+
