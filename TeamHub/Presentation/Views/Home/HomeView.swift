@@ -6,13 +6,11 @@
 //
 
 import SwiftUI
-
-
 struct HomeView: View {
     
     @StateObject private var vm: HomeViewModel
     @State private var showFilterSheet = false
-
+    
     init(vm: HomeViewModel) {
         _vm = StateObject(wrappedValue: vm)
     }
@@ -50,23 +48,23 @@ struct HomeView: View {
                 await vm.load(forceRefresh: false)
             }
             .toolbar {
-                            ToolbarItem(placement: .topBarTrailing) {
-                                Button {
-                                    showFilterSheet = true
-                                } label: {
-                                    Image(systemName: "line.3.horizontal.decrease.circle")
-                                }
-                            }
-                        }
-                        .sheet(isPresented: $showFilterSheet) {
-                            EmployeeFilterSheetView(
-                                departments: vm.availableDepartments,
-                                designations: vm.availableDesignations,
-                                filter: $vm.filter
-                            )
-                        }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showFilterSheet = true
+                    } label: {
+                        Image(systemName: "line.3.horizontal.decrease.circle")
+                    }
+                }
+            }
+            .sheet(isPresented: $showFilterSheet) {
+                EmployeeFilterSheetView(
+                    departments: vm.availableDepartments,
+                    designations: vm.availableDesignations,
+                    filter: $vm.filter
+                )
+            }
             .alert("Error", isPresented: .constant(vm.errorMessage != nil)) {
-//                Button("OK") { vm.errorMessage = nil }
+                //                Button("OK") { vm.errorMessage = nil }
             } message: {
                 Text(vm.errorMessage ?? "")
             }

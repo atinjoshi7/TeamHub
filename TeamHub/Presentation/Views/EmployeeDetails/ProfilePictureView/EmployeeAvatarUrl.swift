@@ -14,8 +14,7 @@ enum EmployeeAvatarUrl {
 
     static func make(from urlString: String?) -> URL? {
 
-        guard let urlString = urlString?
-            .trimmingCharacters(in: .whitespacesAndNewlines) else {
+        guard let urlString = urlString?.trimmingCharacters(in: .whitespacesAndNewlines) else {
             return nil
         }
 

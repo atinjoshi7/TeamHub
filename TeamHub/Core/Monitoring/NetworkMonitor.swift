@@ -14,7 +14,7 @@ protocol NetworkMonitoring {
     func start()
     func stop()
 }
-
+@MainActor
 final class NetworkMonitor: NetworkMonitoring, ObservableObject {
     
     @Published private(set) var isConnected: Bool = true
@@ -31,7 +31,10 @@ final class NetworkMonitor: NetworkMonitoring, ObservableObject {
         monitor.start(queue: queue)
     }
     
-    func stop() {
+    deinit{
         monitor.cancel()
+    }
+    func stop() {
+//        monitor.cancel()
     }
 }

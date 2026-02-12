@@ -12,14 +12,19 @@ import CoreData
 struct TeamHubApp: App {
 
     private let container = AppDIContainer()
+    @StateObject private var networkMonitor = NetworkMonitor()
        
-       init() {
-           container.startNetworkMonitoring()
-       }
+//       init() {
+//           container.startNetworkMonitoring()
+//       }
        
        var body: some Scene {
            WindowGroup {
                HomeView(vm: container.makeHomeViewModel())
+                   .environmentObject(networkMonitor)
+                   .onAppear {
+                       networkMonitor.start()
+                   }
            }
        }
 }

@@ -97,23 +97,4 @@ struct EmployeeFilterSheetView: View {
             filter.selectedDesignations.insert(desig)
         }
     }
-//    private func toggleDepartment(_ dept: String) {
-//        let key = dept.normalizedKey
-//
-//        if filter.selectedDepartmentKeys.contains(key) {
-//            filter.selectedDepartmentKeys.remove(key)
-//        } else {
-//            filter.selectedDepartmentKeys.insert(key)
-//        }
-//    }
-//
-//    private func toggleDesignation(_ desig: String) {
-//        let key = desig.normalizedKey
-//
-//        if filter.selectedDesignationKeys.contains(key) {
-//            filter.selectedDesignationKeys.remove(key)
-//        } else {
-//            filter.selectedDesignationKeys.insert(key)
-//        }
-//    }
 }

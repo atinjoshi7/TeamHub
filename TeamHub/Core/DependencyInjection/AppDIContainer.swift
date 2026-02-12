@@ -20,7 +20,7 @@ final class AppDIContainer {
         EmployeeRemoteDataSourceImpl(apiClient: apiClient)
     
     private lazy var localDataSource: EmployeeLocalDataSource =
-        EmployeeCoreDataSourceImpl(stack: coreDataStack)
+        EmployeeLocalDataSourceImpl(stack: coreDataStack)
     
     // Repository
     private lazy var repository: EmployeeRepository =

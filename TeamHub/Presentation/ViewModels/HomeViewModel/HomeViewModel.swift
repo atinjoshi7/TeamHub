@@ -82,7 +82,7 @@ final class HomeViewModel: ObservableObject {
         } catch let error as AppError {
             errorMessage = error.localizedDescription
         } catch {
-            errorMessage = AppError.unknown.localizedDescription
+            errorMessage = AppError.noInternet.localizedDescription
         }
         
         isLoading = false

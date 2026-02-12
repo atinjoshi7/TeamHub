@@ -9,7 +9,7 @@ import Foundation
 
 import CoreData
 
-final class EmployeeCoreDataSourceImpl: EmployeeLocalDataSource {
+final class EmployeeLocalDataSourceImpl: EmployeeLocalDataSource {
     
     private let stack: CoreDataStacking
     

@@ -14,6 +14,7 @@ extension View{
         self
             .scaledToFill()
             .frame(width: size, height: size)
+            .clipped()
     }
     
 }
@@ -22,5 +23,20 @@ extension String {
     var normalizedKey: String {
         self.trimmingCharacters(in: .whitespacesAndNewlines)
             .lowercased()
+    }
+}
+
+
+struct AvatarPlaceholderView: View{
+    
+    let size: CGFloat
+    
+    var body: some View{
+        Image(systemName: "person.fill")
+            .resizable()
+            .scaledToFit()
+            .frame(width: size,height: size)
+            .foregroundStyle(.secondary)
+            .clipShape(Circle())
     }
 }

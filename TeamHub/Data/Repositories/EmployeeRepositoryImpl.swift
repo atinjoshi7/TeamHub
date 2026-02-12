@@ -28,12 +28,19 @@ final class EmployeeRepositoryImpl: EmployeeRepository {
         
         // If no internet => always local
         if network.isConnected == false {
-//            try await Task.sleep(nanoseconds: 5_000_000_000)
+        //try await Task.sleep(nanoseconds: 5_000_000_000)
             return try local.fetchEmployees()
         }
         
+        // ONLINE + FORCE REFRESH
+          if forceRefresh == true {
+              let employees = try await remote.fetchEmployees()
+              try local.saveEmployees(employees)
+              return employees
+          }
+        
         // If internet is ON:
-        // if forceRefresh = remote
+        // if forceRefresh is true = remote
         // else = try local first then remote
         if forceRefresh == false {
             let cached = try local.fetchEmployees()
@@ -42,6 +49,7 @@ final class EmployeeRepositoryImpl: EmployeeRepository {
             }
         }
         
+       //
         let remoteEmployees = try await remote.fetchEmployees()
         try local.saveEmployees(remoteEmployees)
         return remoteEmployees

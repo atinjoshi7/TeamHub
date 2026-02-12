@@ -97,3 +97,105 @@ EmployeesApp
     └── PresentationTests
         └── HomeViewModelTests.swift
 
+//struct HomeView: View {
+//
+//    @StateObject private var vm: HomeViewModel
+//    @State private var showFilterSheet = false
+//
+//    @EnvironmentObject private var networkMonitor: NetworkMonitor
+//
+//    @StateObject private var connectivityVM = HomeConnectivityViewModel()
+//
+//
+//    init(vm: HomeViewModel) {
+//        _vm = StateObject(wrappedValue: vm)
+//
+//    }
+//
+//    var body: some View {
+//        NavigationStack {
+//            ZStack{
+//
+//                if networkMonitor.isConnected == false && vm.employees.isEmpty && vm.isLoading == false {
+//                    NoInternetView()
+//                } else {
+//                    Group{
+//                        if vm.employees.isEmpty && vm.isLoading{
+//                            List(0..<10, id:\.self){ _ in
+//                                EmployeeRowShimmerView()
+//                            }
+//                            .listStyle(.plain)
+//                        }else{
+//                            List(vm.filteredEmployees) { employee in
+//                                NavigationLink {
+//                                    EmployeeDetailsView(employee: employee)
+//                                } label: {
+//                                    EmployeeRowView(employee: employee)
+//                                }
+//                            }
+//                        }
+//                    }
+//                    VStack {
+//                            if connectivityVM.showOfflineBanner {
+//                                ConnectivityBanner(style: .offline, text: "Offline mode")
+//                            }
+//
+//                            if connectivityVM.showOnlineBanner {
+//                                ConnectivityBanner(style: .online, text: "Back online")
+//                            }
+//
+//                            Spacer()
+//                        }
+//                        .padding(.top, 6)
+//                        .zIndex(999)
+//                }
+//
+//                    .navigationTitle("Employees")
+//                    .searchable(text: $vm.searchText,placement: .navigationBarDrawer(displayMode: .always) ,prompt: "Search employees")
+//                    .refreshable {
+//                        await vm.load(forceRefresh: true)
+//                    }
+//                    .overlay {
+//                        if vm.isLoading {
+//                            ProgressView("Loading...")
+//                        }
+//                    }
+//                    .task {
+//                        await vm.load(forceRefresh: false)
+//                    }
+//                    .onChange(of: networkMonitor.isConnected) { _, newValue in
+//                                  Task {
+//                                      await connectivityVM.handleConnectionChange(isConnected: newValue)
+//
+//                                      // OFF -> ON : refresh from API automatically
+//                                      if newValue == true {
+//                                          await vm.load(forceRefresh: true)
+//                                      }
+//                                  }
+//                              }
+//                    .toolbar {
+//                        ToolbarItem(placement: .topBarTrailing) {
+//                            Button {
+//                                showFilterSheet = true
+//                            } label: {
+//                                Image(systemName: "line.3.horizontal.decrease.circle")
+//                            }
+//                        }
+//                    }
+//                    .sheet(isPresented: $showFilterSheet) {
+//                        EmployeeFilterSheetView(
+//                            departments: vm.availableDepartments,
+//                            designations: vm.availableDesignations,
+//                            filter: $vm.filter
+//                        )
+//                    }
+//                    .alert("Error", isPresented: .constant(vm.errorMessage != nil)) {
+//                        //                Button("OK") { vm.errorMessage = nil }
+//                    } message: {
+//                        Text(vm.errorMessage ?? "")
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
