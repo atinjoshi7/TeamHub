@@ -17,9 +17,9 @@ struct AvatarOverlayViewer: View {
         ZStack {
 
             Rectangle()
-                .fill(.black.opacity(0.35))
-                .ignoresSafeArea()
-                .background(.ultraThinMaterial)
+//                .fill(.black.opacity(0.35))
+//                .ignoresSafeArea()
+//                .background(.ultraThinMaterial)
                 .onTapGesture {
                     dismiss()
                 }

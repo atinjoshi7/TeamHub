@@ -15,6 +15,7 @@ struct TeamHubApp: App {
     @StateObject private var networkMonitor = NetworkMonitor()
        
 //       init() {
+////           NavigationBarAppearance.applySolidStyle()
 //           container.startNetworkMonitoring()
 //       }
        

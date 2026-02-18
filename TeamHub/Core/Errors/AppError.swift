@@ -15,6 +15,7 @@ enum AppError: Error, LocalizedError, Equatable {
     case noInternet
     case server(String)
     case unknown
+    case noUser
     
     var errorDescription: String? {
         switch self {
@@ -28,6 +29,8 @@ enum AppError: Error, LocalizedError, Equatable {
             return "No internet connection."
         case .server(let message):
             return message
+        case .noUser:
+            return "No user found"
         case .unknown:
             return "Something went wrong."
         }

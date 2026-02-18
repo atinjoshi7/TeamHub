@@ -71,13 +71,16 @@ final class HomeViewModel: ObservableObject {
         return result
     }
 
-    
+    func clearError(){
+        errorMessage = nil
+    }
     func load(forceRefresh: Bool = false) async {
         isLoading = true
         errorMessage = nil
         
         do {
 //            try await Task.sleep(nanoseconds: 5_000_000_000)
+            
             employees = try await getEmployeesUseCase.execute(forceRefresh: forceRefresh)
         } catch let error as AppError {
             errorMessage = error.localizedDescription

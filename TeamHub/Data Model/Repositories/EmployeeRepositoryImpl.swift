@@ -26,6 +26,10 @@ final class EmployeeRepositoryImpl: EmployeeRepository {
     
     func getEmployees(forceRefresh: Bool) async throws -> [Employee] {
         
+//        if try local.fetchEmployees().isEmpty == false{
+//            return try local.fetchEmployees()
+//        }
+        
         // If no internet => always local
         if network.isConnected == false {
         //try await Task.sleep(nanoseconds: 5_000_000_000)
@@ -36,7 +40,8 @@ final class EmployeeRepositoryImpl: EmployeeRepository {
           if forceRefresh == true {
               let employees = try await remote.fetchEmployees()
               try local.saveEmployees(employees)
-              return employees
+              return try local.fetchEmployees()
+//              return employees
           }
         
         // If internet is ON:
@@ -52,7 +57,7 @@ final class EmployeeRepositoryImpl: EmployeeRepository {
        //
         let remoteEmployees = try await remote.fetchEmployees()
         try local.saveEmployees(remoteEmployees)
-        return remoteEmployees
+        return try local.fetchEmployees()
     }
     
     func getEmployee(by id: String) async throws -> Employee? {

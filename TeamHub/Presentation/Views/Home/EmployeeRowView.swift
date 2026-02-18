@@ -46,9 +46,20 @@ struct EmployeeRowView: View {
                 Spacer()
                 
                 // Employee status
-                Circle()
-                    .fill(employee.isActive ? Color.green : Color.red)
-                    .frame(width: 10, height: 10)
+                Text(employee.isActive ? "Active" : "Inactive")
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .padding(.horizontal,10)
+                    .padding(.vertical,4)
+                    .background(
+                        Capsule()
+                            .fill(employee.isActive
+                                  ?
+                                Color.green
+                                .opacity(0.15)
+                                  : Color.red.opacity(0.15))
+                    ).foregroundStyle(employee.isActive ? .green: .red)
+//                    .padding(.top, -10)
             }
             .padding(.vertical, 6)
         }

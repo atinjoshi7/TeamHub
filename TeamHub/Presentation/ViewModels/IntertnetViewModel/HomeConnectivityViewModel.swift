@@ -30,7 +30,7 @@ final class HomeConnectivityViewModel: ObservableObject {
             showOfflineBanner = false
             showOnlineBanner = true
 
-            try? await Task.sleep(nanoseconds: 2_000_000_000)
+//            try? await Task.sleep(nanoseconds: 2_000_000_000)
 
             showOnlineBanner = false
         }

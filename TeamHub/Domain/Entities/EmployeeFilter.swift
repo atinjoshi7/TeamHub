@@ -16,7 +16,7 @@ enum EmployeeStatusFilter: String, CaseIterable, Identifiable {
 }
 
 struct EmployeeFilter: Equatable {
-
+    
     var selectedDepartments: Set<String> = []
     var selectedDesignations: Set<String> = []
     var status: EmployeeStatusFilter = .all
@@ -26,6 +26,26 @@ struct EmployeeFilter: Equatable {
         selectedDesignations.isEmpty &&
         status == .all
     }
+    var isApplied: Bool{
+        if status != .all {return true}
+        if selectedDepartments.isEmpty == false {return true}
+        if selectedDesignations.isEmpty == false {return true}
+        return false
+    }
+    var totalCount: Int{
+        var count: Int = 0
+        if status != .all{
+            count += 1
+        }
+        if selectedDepartments.isEmpty == false{
+            count += 1
+        }
+        if selectedDesignations.isEmpty == false{
+            count += 1
+        }
+        return count
+    }
 }
+
 
 

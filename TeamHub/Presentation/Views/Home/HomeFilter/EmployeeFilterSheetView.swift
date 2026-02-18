@@ -11,17 +11,24 @@ struct EmployeeFilterSheetView: View {
 
     let departments: [String]
     let designations: [String]
-
+    @State private var statusColor: Color = .white
     @Binding var filter: EmployeeFilter
     @Environment(\.dismiss) private var dismiss
-
+    @State private var tempFilter: EmployeeFilter
+    
+    init(departments: [String], designations: [String],filter: Binding<EmployeeFilter>){
+        self.departments = departments
+        self.designations = designations
+        _filter = filter
+        _tempFilter = State(initialValue: filter.wrappedValue)
+    }
     var body: some View {
         NavigationStack {
             List {
 
                 // Status
                 Section("Status") {
-                    Picker("Status", selection: $filter.status) {
+                    Picker("Status", selection: $tempFilter.status) {
                         ForEach(EmployeeStatusFilter.allCases) { item in
                             Text(item.rawValue).tag(item)
                         }
@@ -38,7 +45,7 @@ struct EmployeeFilterSheetView: View {
                         ForEach(departments, id: \.self) { dept in
                             MultipleSelectRow(
                                 title: dept,
-                                isSelected: filter.selectedDepartments.contains(dept)
+                                isSelected: tempFilter.selectedDepartments.contains(dept)
                             ) {
                                 toggleDepartment(dept)
                             }
@@ -55,7 +62,7 @@ struct EmployeeFilterSheetView: View {
                         ForEach(designations, id: \.self) { desig in
                             MultipleSelectRow(
                                 title: desig,
-                                isSelected: filter.selectedDesignations.contains(desig)
+                                isSelected: tempFilter.selectedDesignations.contains(desig)
                             ) {
                                 toggleDesignation(desig)
                             }
@@ -66,35 +73,38 @@ struct EmployeeFilterSheetView: View {
             .navigationTitle("Filters")
             .toolbar {
 
-                ToolbarItem(placement: .topBarLeading) {
+                ToolbarItem(placement: .topBarLeading)  {
                     Button("Reset") {
-                        filter = EmployeeFilter()
+                        tempFilter = EmployeeFilter()
+//                        dismiss()
                     }
                 }
 
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Done") {
+                       filter = tempFilter
                         dismiss()
                     }
                     .fontWeight(.semibold)
                 }
             }
+            .tint(.primary)
         }
     }
 
     private func toggleDepartment(_ dept: String) {
-        if filter.selectedDepartments.contains(dept) {
-            filter.selectedDepartments.remove(dept)
+        if tempFilter.selectedDepartments.contains(dept) {
+            tempFilter.selectedDepartments.remove(dept)
         } else {
-            filter.selectedDepartments.insert(dept)
+            tempFilter.selectedDepartments.insert(dept)
         }
     }
 
     private func toggleDesignation(_ desig: String) {
-        if filter.selectedDesignations.contains(desig) {
-            filter.selectedDesignations.remove(desig)
+        if tempFilter.selectedDesignations.contains(desig) {
+            tempFilter.selectedDesignations.remove(desig)
         } else {
-            filter.selectedDesignations.insert(desig)
+            tempFilter.selectedDesignations.insert(desig)
         }
     }
 }

@@ -14,40 +14,57 @@ struct EmployeeDetailsView: View {
     @State private var isFullScreenImage = false
     @State private var showAvatarViewer: Bool = false
     @Namespace private var avatarNamespace
+    @State private var goToPfp = false
 
     var body: some View {
 
         ZStack {
 
-            // MARK: - Main Content
+            // Main Content
             List {
                 Section {
                     HStack(spacing: 14) {
 
                         EmployeeAvatarView(imgURL: employee.imgURL, size: 80)
-                            .matchedGeometryEffect(id: "employee_avatar_\(employee.id)", in: avatarNamespace)
                             .onTapGesture {
-                                withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
-                                    showAvatarViewer = true
-                                }
+                                goToPfp = true
                             }
-
+                        
                         VStack(alignment: .leading, spacing: 6) {
                             Text(employee.name)
                                 .font(.title3.bold())
+                                .fixedSize(horizontal: false, vertical: true)
 
-                            Text(employee.designation)
-                                .foregroundStyle(.secondary)
-                                .fontWeight(.bold)
-
-                            Text(employee.department)
-                                .foregroundStyle(.secondary)
-                                .fontWeight(.bold)
+//                            Text(employee.designation)
+//                                .foregroundStyle(.secondary)
+//                                .fontWeight(.bold)
+//
+//                            Text(employee.department)
+//                                .foregroundStyle(.secondary)
+//                                .fontWeight(.bold)
                         }
+                        Spacer()
+                        Text(employee.isActive ? "Active" : "InActive")
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .padding(.horizontal)
+                            .padding(.vertical,1)
+                            .background(
+                                Capsule()
+                                    .fill(
+                                        employee.isActive ? Color.green.opacity(0.25) : Color.red.opacity(0.25)
+                                    )
+                            )
+                            .foregroundStyle(employee.isActive ? Color.green : Color.red)
                     }
                     .padding(.vertical, 8)
                 }
-
+                Section("Designation"){
+                    Text(employee.designation)
+                }
+                Section("Department"){
+                    Text(employee.department)
+                }
                 Section("Contact") {
                     Text(employee.email)
                 }
@@ -62,24 +79,31 @@ struct EmployeeDetailsView: View {
                         .foregroundStyle(employee.joiningDate == nil ? .secondary : .primary)
                 }
 
-                Section("Employee Status") {
-                    Text(employee.isActive ? "Active" : "Inactive")
-                        .foregroundStyle(employee.isActive ? .green : .red)
-                }
+//                Section("Employee Status") {
+//                    Text(employee.isActive ? "Active" : "Inactive")
+//                        .foregroundStyle(employee.isActive ? .green : .red)
+//                }
             }
+            
             .navigationTitle("Details")
             .disabled(showAvatarViewer)
-
-            // MARK: - Overlay (MUST be inside ZStack)
+            .navigationDestination(isPresented: $goToPfp){
+                PfpView(imgUrl: employee.imgURL ?? "", size: 80)
+            }
+             
+            // Mark: - Overlay (MUST be inside ZStack)
             if showAvatarViewer {
                 AvatarOverlayViewer(
                     employee: employee,
                     namespace: avatarNamespace,
                     isPresented: $showAvatarViewer
                 )
-//                .transition(.opacity)
                 .zIndex(999)
             }
         }
     }
+}
+
+#Preview {
+    EmployeeDetailsView(employee: Employee(id: "dl806", name: "Sunil asadf", designation: "ios", department: "ios", isActive: true, imgURL: "", email: "abc@gmail", city: "gzb", country: "india", joiningDate: Date.now))
 }
