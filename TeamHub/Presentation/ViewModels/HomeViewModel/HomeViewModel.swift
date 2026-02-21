@@ -18,10 +18,10 @@ final class HomeViewModel: ObservableObject {
     
     @Published var filter = EmployeeFilter()
     
-    private let getEmployeesUseCase: GetEmployeesUseCase
+    private let getEmployeesFromRepository: EmployeeRepository
     
-    init(getEmployeesUseCase: GetEmployeesUseCase) {
-        self.getEmployeesUseCase = getEmployeesUseCase
+    init(getEmployeesFromRepository: EmployeeRepository) {
+        self.getEmployeesFromRepository = getEmployeesFromRepository
     }
     
     var availableDepartments: [String] {
@@ -81,7 +81,7 @@ final class HomeViewModel: ObservableObject {
         do {
 //            try await Task.sleep(nanoseconds: 5_000_000_000)
             
-            employees = try await getEmployeesUseCase.execute(forceRefresh: forceRefresh)
+            employees = try await getEmployeesFromRepository.getEmployees(forceRefresh: forceRefresh)
         } catch let error as AppError {
             errorMessage = error.localizedDescription
         } catch {

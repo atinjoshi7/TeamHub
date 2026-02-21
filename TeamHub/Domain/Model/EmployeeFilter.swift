@@ -7,6 +7,10 @@
 
 import Foundation
 
+
+enum FilterTab {
+    case all, status
+}
 enum EmployeeStatusFilter: String, CaseIterable, Identifiable {
     case all = "All"
     case active = "Active"

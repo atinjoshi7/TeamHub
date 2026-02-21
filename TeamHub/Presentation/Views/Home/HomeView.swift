@@ -16,7 +16,7 @@ struct HomeView: View {
     @State private var bannerStyle: ConnectivityBanner.Style = .online
     @State private var bannerText: String = ""
     @FocusState private var isSearchFocused:Bool
-    
+    @EnvironmentObject private var themeManager: ThemeManager
     init(vm: HomeViewModel) {
         _vm = StateObject(wrappedValue: vm)
     }
@@ -28,10 +28,8 @@ struct HomeView: View {
                 NoInternetView()
             }else{
                 VStack(spacing: 0){
-                    
-                    
-                    
                     CustomSearchBar(text: $vm.searchText, placeHolder: "Search employees", isFocused: $isSearchFocused)
+                        .padding(.bottom,10)
                     ZStack{
                         
                         
@@ -51,9 +49,16 @@ struct HomeView: View {
                                         EmployeeDetailsView(employee: employee)
                                     } label: {
                                         EmployeeRowView(employee: employee)
+                                            
                                     }
+                                    
                                 }
+                                
                             }
+                            
+                        }
+                        .refreshable {
+                            await vm.load(forceRefresh: true)
                         }
                     }
                 }
@@ -62,6 +67,8 @@ struct HomeView: View {
                 .navigationBarTitleDisplayMode(.large)
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
+                     
+                        
                         Button {
                             showFilterSheet = true
                             isSearchFocused = false
@@ -70,9 +77,23 @@ struct HomeView: View {
                                   ? "slider.horizontal.3"
                                   : "slider.horizontal.3"
                             )
-
-                            Text("\(vm.filter.totalCount)")
+                            if vm.filter.totalCount != 0{
+                                Text("\(vm.filter.totalCount)")
+                            }
                         }
+                        
+                    }
+                    
+                    
+                    ToolbarItem(){
+                        Button {
+                                   withAnimation(.easeInOut(duration: 0.25)) {
+                                       themeManager.isDarkMode.toggle()
+                                   }
+                               } label: {
+                                   Image(systemName: themeManager.isDarkMode ? "moon.fill" : "sun.max.fill")
+                                       .font(.system(size: 18, weight: .medium))
+                               }
                     }
                 }
                 .sheet(isPresented: $showFilterSheet) {
@@ -90,6 +111,9 @@ struct HomeView: View {
                     Text(vm.errorMessage ?? "")
                 }
             }
+        }
+        .onAppear {
+            isSearchFocused = false
         }
         .overlay(alignment: .top){
             if showConnectivityBanner{
@@ -111,22 +135,16 @@ struct HomeView: View {
                 showConnectivityBanner = true
                 Task{
                     print("Internet is on")
-                   try? await Task.sleep(nanoseconds: 2_000_000_000)
+                    try? await Task.sleep(nanoseconds: 2_000_000_000)
                     showConnectivityBanner = false
                 }
                 
             }
         }
-        .refreshable {
-            await vm.load(forceRefresh: true)
-        }
         .task() {
             print("Fix fetched")
             await vm.load(forceRefresh: false)
         }
-//        .onAppear{
-//            isSearchFocused = false
-//        }
     }
         
 }

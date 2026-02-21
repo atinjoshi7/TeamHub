@@ -28,13 +28,13 @@ final class AppDIContainer {
                                local: localDataSource,
                                network: networkMonitor)
     
-    // UseCases
-    private lazy var getEmployeesUseCase: GetEmployeesUseCase =
-        GetEmployeesUseCaseImpl(repository: repository)
-    
+//    // UseCases
+//    private lazy var getEmployeesUseCase: GetEmployeesUseCase =
+//        GetEmployeesUseCaseImpl(repository: repository)
+//    
     // ViewModels
     func makeHomeViewModel() -> HomeViewModel {
-        HomeViewModel(getEmployeesUseCase: getEmployeesUseCase)
+        HomeViewModel(getEmployeesFromRepository: repository)
     }
     
     // MARK: - Network Start

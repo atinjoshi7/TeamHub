@@ -21,6 +21,12 @@ struct CustomSearchBar: View {
                 .focused(isFocused)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
+                .onChange(of: text) { _, newValue in
+                       let trimmed = newValue.drop(while: { $0 == " " })
+                       if newValue != trimmed {
+                           text = String(trimmed)
+                       }
+                   }
             
             
             
