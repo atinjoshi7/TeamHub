@@ -10,26 +10,21 @@ import CoreData
 
 @main
 struct TeamHubApp: App {
-
+    
     
     private let container = AppDIContainer()
     @StateObject private var networkMonitor = NetworkMonitor()
     @StateObject private var themeManager = ThemeManager()
-       
-//       init() {
-////           NavigationBarAppearance.applySolidStyle()
-//           container.startNetworkMonitoring()
-//       }
-       
-       var body: some Scene {
-           WindowGroup {
-               HomeView(vm: container.makeHomeViewModel())
-                   .environmentObject(networkMonitor)
-                   .environmentObject(themeManager)
-                   .preferredColorScheme(themeManager.colorScheme)
-                   .onAppear {
-                       networkMonitor.start()
-                   }
-           }
-       }
+    
+    var body: some Scene {
+        WindowGroup {
+            HomeView(vm: container.makeHomeViewModel())
+                .environmentObject(networkMonitor)
+                .environmentObject(themeManager)
+                .preferredColorScheme(themeManager.colorScheme)
+                .onAppear {
+                    networkMonitor.start()
+                }
+        }
+    }
 }

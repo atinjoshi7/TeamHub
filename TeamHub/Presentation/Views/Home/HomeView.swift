@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-
+    
     @StateObject private var vm: HomeViewModel
     @State private var showFilterSheet = false
     @EnvironmentObject private var networkStatus : NetworkMonitor
@@ -17,10 +17,11 @@ struct HomeView: View {
     @State private var bannerText: String = ""
     @FocusState private var isSearchFocused:Bool
     @EnvironmentObject private var themeManager: ThemeManager
+    
     init(vm: HomeViewModel) {
         _vm = StateObject(wrappedValue: vm)
     }
-
+    
     var body: some View {
         NavigationStack {
             
@@ -30,8 +31,8 @@ struct HomeView: View {
                 VStack(spacing: 0){
                     CustomSearchBar(text: $vm.searchText, placeHolder: "Search employees", isFocused: $isSearchFocused)
                         .padding(.bottom,10)
+                    
                     ZStack{
-                        
                         
                         if vm.filteredEmployees.isEmpty && !vm.searchText.isEmpty{
                             NoUserFound()
@@ -49,7 +50,7 @@ struct HomeView: View {
                                         EmployeeDetailsView(employee: employee)
                                     } label: {
                                         EmployeeRowView(employee: employee)
-                                            
+                                        
                                     }
                                     
                                 }
@@ -60,40 +61,49 @@ struct HomeView: View {
                         .refreshable {
                             await vm.load(forceRefresh: true)
                         }
+//                        switch vm.viewState {
+//                            
+//                        case .loading:
+//                            List {
+//                                ForEach(0..<10, id: \.self) { _ in
+//                                    EmployeeRowShimmerView()
+//                                }
+//                            }
+//                            .listStyle(.plain)
+//                            
+//                        case .noInternet:
+//                            NoInternetView()
+//                            
+//                        case .filteredEmpty:
+//                            NoUserFound()
+//                            
+//                        case .data(let employees):
+//                            List {
+//                                ForEach(employees) { employee in
+//                                    NavigationLink {
+//                                        EmployeeDetailsView(employee: employee)
+//                                    } label: {
+//                                        EmployeeRowView(employee: employee)
+//                                    }
+//                                }
+//                            }
+//                            .listStyle(.plain)
+//                            .refreshable {
+//                                await vm.load(forceRefresh: true)
+//                            }
+//                            
+//                        }
                     }
                 }
                 .listStyle(.plain)
                 .navigationTitle("Employees")
                 .navigationBarTitleDisplayMode(.large)
                 .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                     
-                        
-                        Button {
-                            showFilterSheet = true
-                            isSearchFocused = false
-                        } label: {
-                            Image(systemName: vm.filter.isApplied
-                                  ? "slider.horizontal.3"
-                                  : "slider.horizontal.3"
-                            )
-                            if vm.filter.totalCount != 0{
-                                Text("\(vm.filter.totalCount)")
-                            }
-                        }
-                        
-                    }
-                    
-                    
-                    ToolbarItem(){
-                        Button {
-                                   withAnimation(.easeInOut(duration: 0.25)) {
-                                       themeManager.isDarkMode.toggle()
-                                   }
-                               } label: {
-                                   Image(systemName: themeManager.isDarkMode ? "moon.fill" : "sun.max.fill")
-                                       .font(.system(size: 18, weight: .medium))
-                               }
+                    HomeToolBarView(
+                      showFilterSheet: $showFilterSheet,
+                      filter: vm.filter,
+                    ){
+                        isSearchFocused = false
                     }
                 }
                 .sheet(isPresented: $showFilterSheet) {
@@ -106,11 +116,14 @@ struct HomeView: View {
                 .alert("Error", isPresented: .constant(vm.errorMessage != nil)) {
                     Button("OK") {
                         vm.clearError()
+                        
                     }
                 } message: {
                     Text(vm.errorMessage ?? "")
                 }
+               
             }
+     
         }
         .onAppear {
             isSearchFocused = false
@@ -135,6 +148,7 @@ struct HomeView: View {
                 showConnectivityBanner = true
                 Task{
                     print("Internet is on")
+                    await vm.load(forceRefresh: false)
                     try? await Task.sleep(nanoseconds: 2_000_000_000)
                     showConnectivityBanner = false
                 }
@@ -146,7 +160,7 @@ struct HomeView: View {
             await vm.load(forceRefresh: false)
         }
     }
-        
+    
 }
 
 

@@ -40,3 +40,20 @@ struct AvatarPlaceholderView: View{
             .clipShape(Circle())
     }
 }
+
+enum EmployeeAvatarUrl {
+
+    static func make(from urlString: String?) -> URL? {
+
+        guard let urlString = urlString?.trimmingCharacters(in: .whitespacesAndNewlines) else {
+            return nil
+        }
+
+        if urlString.isEmpty {
+            return nil
+        }
+
+        return URL(string: urlString)
+    }
+}
+

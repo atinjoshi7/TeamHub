@@ -11,17 +11,7 @@ import Combine
 final class ThemeManager: ObservableObject{
     
     @AppStorage("isDarkMode") var isDarkMode: Bool = false
-
-//    @Published var isDarkMode: Bool {
-//           didSet {
-//               isDarkStored = isDarkMode
-//           }
-//       }
-//    
-//    init() {
-//        isDarkMode = isDarkStored
-//    }
-         
+    
     var colorScheme: ColorScheme {
            isDarkMode ? .dark : .light
        }

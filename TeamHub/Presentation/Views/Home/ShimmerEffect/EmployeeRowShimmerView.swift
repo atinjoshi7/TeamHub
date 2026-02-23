@@ -29,7 +29,7 @@ struct EmployeeRowShimmerView: View {
 
             Spacer()
 
-            Circle()
+            Capsule()
                 .fill(Color(.systemGray5))
                 .frame(width: 10, height: 10)
         }

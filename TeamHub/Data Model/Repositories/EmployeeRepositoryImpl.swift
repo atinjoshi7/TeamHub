@@ -38,6 +38,7 @@ final class EmployeeRepositoryImpl: EmployeeRepository {
         
         // ONLINE + FORCE REFRESH
           if forceRefresh == true {
+              
               let employees = try await remote.fetchEmployees()
               try local.saveEmployees(employees)
               return try local.fetchEmployees()

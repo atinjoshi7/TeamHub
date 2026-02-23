@@ -19,13 +19,8 @@ final class URLSessionAPIClient: APIClient {
         
         let url = try endpoint.makeURL()
         
-        var request = URLRequest(url: url)
-        request.httpMethod = endpoint.method
-        
-        endpoint.headers.forEach { request.setValue($0.value, forHTTPHeaderField: $0.key) }
-        
         do {
-            let (data, response) = try await session.data(for: request)
+            let (data, response) = try await session.data(from: url)
             
             guard let http = response as? HTTPURLResponse else {
                 throw AppError.invalidResponse
