@@ -1,11 +1,12 @@
+////
+////  HomeView.swift
+////  TeamHub
+////
+////  Created by Jarvis on 11/02/26.
+////
 //
-//  HomeView.swift
-//  TeamHub
-//
-//  Created by Jarvis on 11/02/26.
-//
-
 import SwiftUI
+import UIKit
 
 struct HomeView: View {
     
@@ -17,13 +18,14 @@ struct HomeView: View {
     @State private var bannerText: String = ""
     @FocusState private var isSearchFocused:Bool
     @EnvironmentObject private var themeManager: ThemeManager
+    @State private var path = NavigationPath()
     
     init(vm: HomeViewModel) {
         _vm = StateObject(wrappedValue: vm)
     }
     
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path){
             
             if networkStatus.isConnected == false && vm.employees.isEmpty {
                 NoInternetView()
@@ -34,9 +36,8 @@ struct HomeView: View {
                     
                     ZStack{
                         
-                        if vm.filteredEmployees.isEmpty && !vm.searchText.isEmpty{
+                        if vm.filteredEmployees.isEmpty || !vm.searchText.isEmpty{
                             NoUserFound()
-                                .frame(width: .infinity, height: .infinity)
                         }
                         List {
                             
@@ -46,66 +47,36 @@ struct HomeView: View {
                                 }
                             } else {
                                 ForEach(vm.filteredEmployees) { employee in
-                                    NavigationLink {
-                                        EmployeeDetailsView(employee: employee)
-                                    } label: {
-                                        EmployeeRowView(employee: employee)
-                                        
-                                    }
-                                    
+                                    EmployeeRowView(employee: employee)
+                                        .contentShape(Rectangle())
+                                        .onTapGesture {
+                                            path.append(employee)
+                                        }
                                 }
                                 
                             }
                             
                         }
+                        .scrollDismissesKeyboard(.immediately)
                         .refreshable {
+                            print("refreshed data")
                             await vm.load(forceRefresh: true)
                         }
-//                        switch vm.viewState {
-//                            
-//                        case .loading:
-//                            List {
-//                                ForEach(0..<10, id: \.self) { _ in
-//                                    EmployeeRowShimmerView()
-//                                }
-//                            }
-//                            .listStyle(.plain)
-//                            
-//                        case .noInternet:
-//                            NoInternetView()
-//                            
-//                        case .filteredEmpty:
-//                            NoUserFound()
-//                            
-//                        case .data(let employees):
-//                            List {
-//                                ForEach(employees) { employee in
-//                                    NavigationLink {
-//                                        EmployeeDetailsView(employee: employee)
-//                                    } label: {
-//                                        EmployeeRowView(employee: employee)
-//                                    }
-//                                }
-//                            }
-//                            .listStyle(.plain)
-//                            .refreshable {
-//                                await vm.load(forceRefresh: true)
-//                            }
-//                            
-//                        }
                     }
                 }
+                
                 .listStyle(.plain)
                 .navigationTitle("Employees")
                 .navigationBarTitleDisplayMode(.large)
                 .toolbar {
                     HomeToolBarView(
-                      showFilterSheet: $showFilterSheet,
-                      filter: vm.filter,
+                        showFilterSheet: $showFilterSheet,
+                        filter: vm.filter,
                     ){
                         isSearchFocused = false
                     }
                 }
+                
                 .sheet(isPresented: $showFilterSheet) {
                     EmployeeFilterSheetView(
                         departments: vm.availableDepartments,
@@ -121,13 +92,18 @@ struct HomeView: View {
                 } message: {
                     Text(vm.errorMessage ?? "")
                 }
-               
+                .navigationDestination(for: Employee.self){
+                    employee in
+                    EmployeeDetailsView(employee: employee)
+                }
             }
-     
+            
         }
-        .onAppear {
-            isSearchFocused = false
-        }
+        .simultaneousGesture(
+            TapGesture().onEnded {
+                isSearchFocused = false
+            }
+        )
         .overlay(alignment: .top){
             if showConnectivityBanner{
                 ConnectivityBanner(style: bannerStyle, text: bannerText)
@@ -139,7 +115,7 @@ struct HomeView: View {
             status in
             if status == false {
                 bannerStyle = .offline
-                bannerText = "No Internet Connection"
+                bannerText = "Offline mode"
                 showConnectivityBanner = true
             }
             else {
@@ -155,12 +131,10 @@ struct HomeView: View {
                 
             }
         }
-        .task() {
+        .task(id: "Load only once"){
             print("Fix fetched")
             await vm.load(forceRefresh: false)
         }
     }
     
 }
-
-

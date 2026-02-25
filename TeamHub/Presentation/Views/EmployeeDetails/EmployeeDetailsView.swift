@@ -15,7 +15,7 @@ struct EmployeeDetailsView: View {
     @State private var showAvatarViewer: Bool = false
     @Namespace private var avatarNamespace
     @State private var goToPfp = false
-
+    @State private var canOpenpfp = false
     var body: some View {
 
         ZStack {
@@ -25,23 +25,26 @@ struct EmployeeDetailsView: View {
                 Section {
                     HStack(spacing: 14) {
 
-                        EmployeeAvatarView(imgURL: employee.imgURL, size: 80)
-                            .onTapGesture {
+                        EmployeeAvatarView(
+                            imgURL: employee.imgURL,
+                            size: 80,
+                            onImageLoadSuccess: {
+                                canOpenpfp = true
+                                
+                            },
+                            onImageLoadFailure:{
+                                canOpenpfp = false
+                            }
+                        ) .onTapGesture {
+                            if canOpenpfp{
                                 goToPfp = true
+                            }
                             }
                         
                         VStack(alignment: .leading, spacing: 6) {
                             Text(employee.name)
                                 .font(.title3.bold())
                                 .fixedSize(horizontal: false, vertical: true)
-
-//                            Text(employee.designation)
-//                                .foregroundStyle(.secondary)
-//                                .fontWeight(.bold)
-//
-//                            Text(employee.department)
-//                                .foregroundStyle(.secondary)
-//                                .fontWeight(.bold)
                         }
                         Spacer()
                         Text(employee.isActive ? "Active" : "InActive")
@@ -78,13 +81,8 @@ struct EmployeeDetailsView: View {
                     Text(employee.joiningDate?.formatted(date: .abbreviated, time: .omitted) ?? "N/A")
                         .foregroundStyle(employee.joiningDate == nil ? .secondary : .primary)
                 }
-
-//                Section("Employee Status") {
-//                    Text(employee.isActive ? "Active" : "Inactive")
-//                        .foregroundStyle(employee.isActive ? .green : .red)
-//                }
             }
-            
+            .listSectionSpacing(.compact)
             .navigationTitle("Details")
             .disabled(showAvatarViewer)
             .navigationDestination(isPresented: $goToPfp){

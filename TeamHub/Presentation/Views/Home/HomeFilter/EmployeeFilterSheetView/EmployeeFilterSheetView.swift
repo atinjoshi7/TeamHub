@@ -14,6 +14,7 @@ struct EmployeeFilterSheetView: View {
     @Binding var filter: EmployeeFilter
     @Environment(\.dismiss) private var dismiss
     @State private var tempFilter: EmployeeFilter
+    @Environment(\.colorScheme) private var colorScheme
     
     private var showDotOnAll: Bool {
         tempFilter.selectedDepartments.isEmpty == false ||
@@ -45,6 +46,25 @@ struct EmployeeFilterSheetView: View {
             return  .primary
         }
     }
+    private var selectedBackgroundColor: Color {
+        if colorScheme == .dark {
+            return Color.white.opacity(0.15)
+        } else {
+            return Color.accentColor.opacity(0.15)
+        }
+    }
+
+    private var selectedTextColor: Color {
+        if colorScheme == .dark {
+            return .white
+        } else {
+            return .primary
+        }
+    }
+
+    private var unselectedBackgroundColor: Color {
+        Color.clear
+    }
     
     init(departments: [String], designations: [String],filter: Binding<EmployeeFilter>){
         self.departments = departments
@@ -64,14 +84,14 @@ struct EmployeeFilterSheetView: View {
                             tab: .all,
                             showDot: showDotOnAll
                         )
-                        
                         tabButton(
                             title: "Status",
                             tab: .status,
                             showDot: showDotOnStatus
                         )
+
                     }
-                    
+
                 }
                 if selectedTab == .all {
                     // Department multi-select
@@ -140,31 +160,70 @@ struct EmployeeFilterSheetView: View {
             .tint(.primary)
         }
     }
+//    private func tabButton(title: String, tab: FilterTab, showDot: Bool) -> some View {
+//        Button {
+//            selectedTab = tab
+//        } label: {
+//            HStack() {
+//                
+//                Text(title)
+//                    .font(.subheadline.weight(.semibold))
+//                    .foregroundStyle(selectedTab == tab ? selectedTextColor: .primary)
+//                    .frame(maxWidth: .infinity)
+//                    .padding(.vertical, 10)
+//                    .background(
+//                        RoundedRectangle(cornerRadius: 8, style: .continuous)
+//                            .fill(selectedTab == tab ? selectedTextColor  : unselectedBackgroundColor)
+//                            .padding(2)
+//                    )
+//                    .overlay(alignment: .topTrailing){
+//                        if showDot{
+//                            Circle()
+//                                .fill(Color.blue)
+//                                .frame(width: 7, height: 7)
+//                                .padding(.top, 6)
+//                                .padding(.trailing, 12)
+//                        }
+//                        
+//                    }
+//                    .contentShape(Rectangle())
+//            }
+//        }
+//        .buttonStyle(.plain)
+//        .background(
+//            RoundedRectangle(cornerRadius: 20, style: .continuous)
+//                .fill(Color(.secondarySystemBackground))
+//        )
+//        .overlay(
+//            RoundedRectangle(cornerRadius: 13, style: .continuous)
+//                .stroke(Color.primary.opacity(0.15), lineWidth: 1)
+//        )
+//    }
     private func tabButton(title: String, tab: FilterTab, showDot: Bool) -> some View {
         Button {
-            selectedTab = tab
+            withAnimation(.easeInOut(duration: 0.2)) {
+                selectedTab = tab
+            }
         } label: {
-            HStack() {
-                
+            HStack {
                 Text(title)
                     .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(selectedTab == tab ? Color(.systemBackground): Color.primary)
+                    .foregroundStyle(selectedTab == tab ? selectedTextColor : .primary)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 10)
                     .background(
                         RoundedRectangle(cornerRadius: 8, style: .continuous)
-                            .fill(selectedTab == tab ? Color.accentColor : Color.clear)
+                            .fill(selectedTab == tab ? selectedBackgroundColor : unselectedBackgroundColor)
                             .padding(2)
                     )
-                    .overlay(alignment: .topTrailing){
-                        if showDot{
+                    .overlay(alignment: .topTrailing) {
+                        if showDot {
                             Circle()
-                                .fill(Color.blue)
+                                .fill(.blue)
                                 .frame(width: 7, height: 7)
                                 .padding(.top, 6)
                                 .padding(.trailing, 12)
                         }
-                        
                     }
                     .contentShape(Rectangle())
             }

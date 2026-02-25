@@ -27,6 +27,11 @@ struct EmployeeRowView: View {
                         .resizable()
                         .imgProp(size: 62)
                         .clipShape(Circle())
+                        .overlay{
+                            Circle()
+                                .stroke(ThemeManager().isDarkMode ? Color.white : Color.black,lineWidth: 2)
+                        }
+                        
                 }else {
                     // This block gets executed when url is nil.
                     AvatarPlaceholderView(size: 62)
@@ -34,7 +39,7 @@ struct EmployeeRowView: View {
                 
                 VStack(alignment: .leading, spacing: 4) {
                     // Employee name
-                    Text(employee.name)
+                    Text(employee.name.capitalized)
                         .font(.headline)
                     
                     // Employee department and designation
@@ -46,7 +51,7 @@ struct EmployeeRowView: View {
                 Spacer()
                 
                 // Employee status
-                Text(employee.isActive ? "Active" : "Inactive")
+                Text(employee.isActive ? "Active" : "InActive")
                     .font(.caption)
                     .fontWeight(.medium)
                     .padding(.horizontal,10)
@@ -59,7 +64,6 @@ struct EmployeeRowView: View {
                                 .opacity(0.15)
                                   : Color.red.opacity(0.15))
                     ).foregroundStyle(employee.isActive ? .green: .red)
-//                    .padding(.top, -10)
             }
             .padding(.vertical, 6)
         }

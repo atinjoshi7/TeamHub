@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
  extension JSONDecoder {
     static var employeesDecoder: JSONDecoder {
@@ -21,4 +22,12 @@ extension DateFormatter {
         df.dateFormat = "yyyy-MM-dd"
         return df
     }()
+}
+extension UIApplication {
+    func dismissKeyboard() {
+        sendAction(#selector(UIResponder.resignFirstResponder),
+                   to: nil,
+                   from: nil,
+                   for: nil)
+    }
 }

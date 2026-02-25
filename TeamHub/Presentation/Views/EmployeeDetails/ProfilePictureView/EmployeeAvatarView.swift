@@ -15,7 +15,9 @@ struct EmployeeAvatarView: View {
 
     let imgURL: String?
     let size: CGFloat
-
+    var onImageLoadSuccess: ( () -> Void )? = nil
+    var onImageLoadFailure: ( () -> Void )? = nil
+    @State private var loadFailed = false
     var body: some View {
 
         let url = EmployeeAvatarUrl.make(from: imgURL)
@@ -23,6 +25,13 @@ struct EmployeeAvatarView: View {
         Group {
             if let url = url {
                 KFImage(url)
+                    .onSuccess { _ in
+                        onImageLoadSuccess?()
+                    }
+                    .onFailure{ _ in
+                        loadFailed = true
+                        onImageLoadFailure?()
+                    }
                     .placeholder { placeholder }
                     .resizable()
                     .scaledToFill()

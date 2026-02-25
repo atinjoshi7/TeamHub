@@ -103,7 +103,7 @@ final class HomeViewModel: ObservableObject {
     func clearError(){
         errorMessage = nil
     }
-    func load(forceRefresh: Bool = false) async {
+    func load(forceRefresh: Bool) async {
         isLoading = true
         errorMessage = nil
         

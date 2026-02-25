@@ -37,6 +37,7 @@ struct AvatarPlaceholderView: View{
             .scaledToFit()
             .frame(width: size,height: size)
             .foregroundStyle(.secondary)
+            .clipped()
             .clipShape(Circle())
     }
 }
