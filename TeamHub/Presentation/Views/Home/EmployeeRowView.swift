@@ -30,8 +30,10 @@ struct EmployeeRowView: View {
                         .overlay{
                             Circle()
                                 .stroke(themeManager.isDarkMode ? Color.white : Color.black,lineWidth: 1.5)
-                                .shadow(color: .gray, radius: 2)
+                                
                         }
+
+                        .shadow(color: .gray, radius: 2)
                         
                 }else {
                     // This block gets executed when url is nil.

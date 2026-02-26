@@ -7,13 +7,12 @@
 
 import SwiftUI
 
+enum Style{
+    case offline
+    case online
+}
+
 struct ConnectivityBanner: View {
-    
-    enum Style{
-        case offline
-        case online
-    }
-    
     let style: Style
     let text: String
     

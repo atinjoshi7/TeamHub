@@ -14,7 +14,7 @@ struct HomeView: View {
     @State private var showFilterSheet = false
     @EnvironmentObject private var networkStatus : NetworkMonitor
     @State private var showConnectivityBanner = false
-    @State private var bannerStyle: ConnectivityBanner.Style = .online
+    @State private var bannerStyle: Style = .online
     @State private var bannerText: String = ""
     @FocusState private var isSearchFocused:Bool
     @EnvironmentObject private var themeManager: ThemeManager
