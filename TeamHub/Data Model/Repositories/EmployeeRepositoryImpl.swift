@@ -61,22 +61,22 @@ final class EmployeeRepositoryImpl: EmployeeRepository {
         return try local.fetchEmployees()
     }
     
-    func getEmployee(by id: String) async throws -> Employee? {
-        
-        // Try local first always (fast)
-        if let localEmployee = try local.fetchEmployee(by: id) {
-            return localEmployee
-        }
-        
-        // If no internet, stop here
-        if network.isConnected == false {
-            return nil
-        }
-        
-        // If you had an endpoint for single employee, call it here.
-        // For now, fallback: fetch list and filter.
-        let employees = try await remote.fetchEmployees()
-        try local.saveEmployees(employees)
-        return employees.first { $0.id == id }
-    }
+//    func getEmployee(by id: String) async throws -> Employee? {
+//        
+//        // Try local first always (fast)
+//        if let localEmployee = try local.fetchEmployee(by: id) {
+//            return localEmployee
+//        }
+//        
+//        // If no internet, stop here
+//        if network.isConnected == false {
+//            return nil
+//        }
+//        
+//        // If you had an endpoint for single employee, call it here.
+//        // For now, fallback: fetch list and filter.
+//        let employees = try await remote.fetchEmployees()
+//        try local.saveEmployees(employees)
+//        return employees.first { $0.id == id }
+//    }
 }

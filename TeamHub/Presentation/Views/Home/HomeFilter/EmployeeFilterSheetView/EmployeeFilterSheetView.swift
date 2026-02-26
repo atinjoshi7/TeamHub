@@ -35,17 +35,6 @@ struct EmployeeFilterSheetView: View {
     
     @State private var selectedTab: FilterTab = .all
     
-    private var statusColor: Color {
-        if tempFilter.status == .active {
-            return .green
-        }
-        if tempFilter.status == .inactive{
-            return .red
-        }
-        else{
-            return  .primary
-        }
-    }
     private var selectedBackgroundColor: Color {
         if colorScheme == .dark {
             return Color.white.opacity(0.15)
@@ -145,7 +134,6 @@ struct EmployeeFilterSheetView: View {
                 ToolbarItem(placement: .topBarLeading)  {
                     Button("Clear") {
                         tempFilter = EmployeeFilter()
-                        //                        dismiss()
                     }
                 }
                 
@@ -160,45 +148,6 @@ struct EmployeeFilterSheetView: View {
             .tint(.primary)
         }
     }
-//    private func tabButton(title: String, tab: FilterTab, showDot: Bool) -> some View {
-//        Button {
-//            selectedTab = tab
-//        } label: {
-//            HStack() {
-//                
-//                Text(title)
-//                    .font(.subheadline.weight(.semibold))
-//                    .foregroundStyle(selectedTab == tab ? selectedTextColor: .primary)
-//                    .frame(maxWidth: .infinity)
-//                    .padding(.vertical, 10)
-//                    .background(
-//                        RoundedRectangle(cornerRadius: 8, style: .continuous)
-//                            .fill(selectedTab == tab ? selectedTextColor  : unselectedBackgroundColor)
-//                            .padding(2)
-//                    )
-//                    .overlay(alignment: .topTrailing){
-//                        if showDot{
-//                            Circle()
-//                                .fill(Color.blue)
-//                                .frame(width: 7, height: 7)
-//                                .padding(.top, 6)
-//                                .padding(.trailing, 12)
-//                        }
-//                        
-//                    }
-//                    .contentShape(Rectangle())
-//            }
-//        }
-//        .buttonStyle(.plain)
-//        .background(
-//            RoundedRectangle(cornerRadius: 20, style: .continuous)
-//                .fill(Color(.secondarySystemBackground))
-//        )
-//        .overlay(
-//            RoundedRectangle(cornerRadius: 13, style: .continuous)
-//                .stroke(Color.primary.opacity(0.15), lineWidth: 1)
-//        )
-//    }
     private func tabButton(title: String, tab: FilterTab, showDot: Bool) -> some View {
         Button {
             withAnimation(.easeInOut(duration: 0.2)) {
@@ -256,19 +205,12 @@ struct EmployeeFilterSheetView: View {
                 if tempFilter.status == item {
                     Image(systemName: "checkmark")
                         .fontWeight(.bold)
-                        .foregroundStyle(statusColor)
+                        .foregroundStyle(.blue)
                 }
             }
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-    }
-    
-    
-    private func color(for item: EmployeeStatusFilter) -> Color {
-        if item == .active { return .green }
-        if item == .inactive { return .red }
-        return .secondary
     }
     
     private func toggleDepartment(_ dept: String) {

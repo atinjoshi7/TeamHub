@@ -11,7 +11,7 @@ import Kingfisher
 struct EmployeeRowView: View {
     
     let employee: Employee
-    
+    @EnvironmentObject var themeManager: ThemeManager
     var body: some View {
         let url = EmployeeAvatarUrl.make(from: employee.imgURL ?? "")
         Group{
@@ -29,7 +29,8 @@ struct EmployeeRowView: View {
                         .clipShape(Circle())
                         .overlay{
                             Circle()
-                                .stroke(ThemeManager().isDarkMode ? Color.white : Color.black,lineWidth: 2)
+                                .stroke(themeManager.isDarkMode ? Color.white : Color.black,lineWidth: 1.5)
+                                .shadow(color: .gray, radius: 2)
                         }
                         
                 }else {

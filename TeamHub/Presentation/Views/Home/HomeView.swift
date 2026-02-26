@@ -35,10 +35,11 @@ struct HomeView: View {
                         .padding(.bottom,10)
                     
                     ZStack{
-                        
-                        if vm.filteredEmployees.isEmpty || !vm.searchText.isEmpty{
+                        // If no user found after search/filter.
+                        if vm.filteredEmployees.isEmpty  {
                             NoUserFound()
                         }
+                       
                         List {
                             
                             if vm.employees.isEmpty && vm.isLoading {

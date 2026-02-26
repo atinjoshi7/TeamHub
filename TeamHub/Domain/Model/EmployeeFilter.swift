@@ -42,10 +42,10 @@ struct EmployeeFilter: Equatable {
             count += 1
         }
         if selectedDepartments.isEmpty == false{
-            count += 1
+            count += selectedDepartments.count
         }
         if selectedDesignations.isEmpty == false{
-            count += 1
+            count += selectedDesignations.count
         }
         return count
     }
