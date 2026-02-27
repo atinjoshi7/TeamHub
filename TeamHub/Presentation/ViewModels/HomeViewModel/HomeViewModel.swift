@@ -108,8 +108,6 @@ final class HomeViewModel: ObservableObject {
         errorMessage = nil
         
         do {
-//            try await Task.sleep(nanoseconds: 5_000_000_000)
-            
             employees = try await getEmployeesFromRepository.getEmployees(forceRefresh: forceRefresh)
         } catch let error as AppError {
             errorMessage = error.localizedDescription
@@ -120,3 +118,5 @@ final class HomeViewModel: ObservableObject {
         isLoading = false
     }
 }
+
+

@@ -12,7 +12,7 @@ import CoreData
 struct TeamHubApp: App {
     
     
-    private let container = AppDIContainer()
+    let container = AppDIContainer()
     @StateObject private var networkMonitor = NetworkMonitor()
     @StateObject private var themeManager = ThemeManager()
     

@@ -47,7 +47,7 @@ struct EmployeeDetailsView: View {
                                 .fixedSize(horizontal: false, vertical: true)
                         }
                         Spacer()
-                        Text(employee.isActive ? "Active" : "InActive")
+                        Text(employee.isActive ? "Active" : "Inactive")
                             .font(.caption)
                             .fontWeight(.medium)
                             .padding(.horizontal)

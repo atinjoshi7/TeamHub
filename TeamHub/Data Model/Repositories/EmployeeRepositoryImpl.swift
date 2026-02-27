@@ -26,13 +26,10 @@ final class EmployeeRepositoryImpl: EmployeeRepository {
     
     func getEmployees(forceRefresh: Bool) async throws -> [Employee] {
         
-//        if try local.fetchEmployees().isEmpty == false{
-//            return try local.fetchEmployees()
-//        }
+
         
         // If no internet => always local
         if network.isConnected == false {
-        //try await Task.sleep(nanoseconds: 5_000_000_000)
             return try local.fetchEmployees()
         }
         
@@ -42,7 +39,6 @@ final class EmployeeRepositoryImpl: EmployeeRepository {
               let employees = try await remote.fetchEmployees()
               try local.saveEmployees(employees)
               return try local.fetchEmployees()
-//              return employees
           }
         
         // If internet is ON:
@@ -55,28 +51,9 @@ final class EmployeeRepositoryImpl: EmployeeRepository {
             }
         }
         
-       //
         let remoteEmployees = try await remote.fetchEmployees()
         try local.saveEmployees(remoteEmployees)
         return try local.fetchEmployees()
     }
     
-//    func getEmployee(by id: String) async throws -> Employee? {
-//        
-//        // Try local first always (fast)
-//        if let localEmployee = try local.fetchEmployee(by: id) {
-//            return localEmployee
-//        }
-//        
-//        // If no internet, stop here
-//        if network.isConnected == false {
-//            return nil
-//        }
-//        
-//        // If you had an endpoint for single employee, call it here.
-//        // For now, fallback: fetch list and filter.
-//        let employees = try await remote.fetchEmployees()
-//        try local.saveEmployees(employees)
-//        return employees.first { $0.id == id }
-//    }
 }

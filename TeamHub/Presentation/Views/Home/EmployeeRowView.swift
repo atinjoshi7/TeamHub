@@ -54,7 +54,7 @@ struct EmployeeRowView: View {
                 Spacer()
                 
                 // Employee status
-                Text(employee.isActive ? "Active" : "InActive")
+                Text(employee.isActive ? "Active" : "Inactive")
                     .font(.caption)
                     .fontWeight(.medium)
                     .padding(.horizontal,10)

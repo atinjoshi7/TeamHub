@@ -10,13 +10,14 @@ import UIKit
 
 struct HomeView: View {
     
-    @StateObject private var vm: HomeViewModel
+    @StateObject private var vm: HomeViewModel 
     @State private var showFilterSheet = false
+    @FocusState private var isSearchFocused:Bool
     @EnvironmentObject private var networkStatus : NetworkMonitor
     @State private var showConnectivityBanner = false
     @State private var bannerStyle: Style = .online
     @State private var bannerText: String = ""
-    @FocusState private var isSearchFocused:Bool
+    
     @EnvironmentObject private var themeManager: ThemeManager
     @State private var path = NavigationPath()
     

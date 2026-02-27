@@ -27,11 +27,7 @@ final class AppDIContainer {
         EmployeeRepositoryImpl(remote: remoteDataSource,
                                local: localDataSource,
                                network: networkMonitor)
-    
-//    // UseCases
-//    private lazy var getEmployeesUseCase: GetEmployeesUseCase =
-//        GetEmployeesUseCaseImpl(repository: repository)
-//    
+       
     // ViewModels
     func makeHomeViewModel() -> HomeViewModel {
         HomeViewModel(getEmployeesFromRepository: repository)
