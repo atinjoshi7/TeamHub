@@ -4,9 +4,9 @@
 //
 //  Created by Jarvis on 17/02/26.
 //
-
 import SwiftUI
 
+/* Created a custom search bar instead of using .searchable because we can easily integrate in other views where .searchable might be  */
 struct CustomSearchBar: View {
     
     @Binding var text: String

@@ -58,3 +58,6 @@ enum EmployeeAvatarUrl {
     }
 }
 
+func searchBarInputHandler(){
+    
+}

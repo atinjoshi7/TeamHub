@@ -13,15 +13,17 @@ struct PfpView: View{
     
     let imgUrl: String
     let size: CGFloat
-    @Environment( \.dismiss) private var dismiss
     @State private var loadFailed: Bool = false
-   
     
+    
+    /* Responsible for showing the enlarged image of the user */
     var body: some View{
         
         ZStack{
-            if let url = URL(string: imgUrl), loadFailed == false{
 
+            if let url = URL(string: imgUrl), loadFailed == false{
+                
+                /* This is the blurred background image of user. */
                 KFImage(url)
                     .onFailure{ _ in
                         loadFailed = true
@@ -39,6 +41,7 @@ struct PfpView: View{
                 VStack{
                     
                     Spacer()
+                    /* This is the image of the user, placed in the center */
                     KFImage(URL(string: imgUrl))
                         .onFailure { _ in
                             loadFailed = true

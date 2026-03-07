@@ -15,27 +15,28 @@ struct EmployeeAvatarView: View {
 
     let imgURL: String?
     let size: CGFloat
-    var onImageLoadSuccess: ( () -> Void )? = nil
-    var onImageLoadFailure: ( () -> Void )? = nil
+
+    @Binding var canOpenPfp: Bool
     @State private var loadFailed = false
+    
+    /*This is the image of user in the details screen, it is created separartely for image related code handling and making it reusable in future use.*/
     var body: some View {
 
         let url = EmployeeAvatarUrl.make(from: imgURL)
 
         Group {
-            if let url = url {
+            if let url = url, loadFailed == false {
                 KFImage(url)
                     .onSuccess { _ in
-                        onImageLoadSuccess?()
+                        canOpenPfp = true
                     }
                     .onFailure{ _ in
                         loadFailed = true
-                        onImageLoadFailure?()
+                        canOpenPfp = false
                     }
-                    .placeholder { placeholder }
                     .resizable()
                     .scaledToFill()
-            } else {
+            } else { 
                 placeholder
             }
         }
@@ -44,6 +45,7 @@ struct EmployeeAvatarView: View {
         .clipShape(Circle())
     }
 
+    /* System generated person image with some functionalities */
     private var placeholder: some View {
         Image(systemName: "person.fill")
             .resizable()

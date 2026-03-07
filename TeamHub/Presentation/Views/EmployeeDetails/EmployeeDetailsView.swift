@@ -12,34 +12,30 @@ struct EmployeeDetailsView: View {
     let employee: Employee
 
     @State private var isFullScreenImage = false
-    @State private var showAvatarViewer: Bool = false
-    @Namespace private var avatarNamespace
     @State private var goToPfp = false
     @State private var canOpenpfp = false
+    
     var body: some View {
-
+        
         ZStack {
-
-            // Main Content
+            
+            /*shows all the details of user like image, name, active status, department, designation, contact,
+            joinging date, country and city. */
             List {
                 Section {
                     HStack(spacing: 14) {
-
+                        
+                        
                         EmployeeAvatarView(
                             imgURL: employee.imgURL,
                             size: 80,
-                            onImageLoadSuccess: {
-                                canOpenpfp = true
-                                
-                            },
-                            onImageLoadFailure:{
-                                canOpenpfp = false
-                            }
+                            canOpenPfp: $canOpenpfp
                         ) .onTapGesture {
                             if canOpenpfp{
                                 goToPfp = true
                             }
                             }
+                        
                         
                         VStack(alignment: .leading, spacing: 6) {
                             Text(employee.name)
@@ -84,24 +80,16 @@ struct EmployeeDetailsView: View {
             }
             .listSectionSpacing(.compact)
             .navigationTitle("Details")
-            .disabled(showAvatarViewer)
+
             .navigationDestination(isPresented: $goToPfp){
                 PfpView(imgUrl: employee.imgURL ?? "", size: 80)
-            }
-             
-            // Mark: - Overlay (MUST be inside ZStack)
-            if showAvatarViewer {
-                AvatarOverlayViewer(
-                    employee: employee,
-                    namespace: avatarNamespace,
-                    isPresented: $showAvatarViewer
-                )
-                .zIndex(999)
             }
         }
     }
 }
 
+
 #Preview {
+    // Testing data for preview.
     EmployeeDetailsView(employee: Employee(id: "dl806", name: "Sunil asadf", designation: "ios", department: "ios", isActive: true, imgURL: "", email: "abc@gmail", city: "gzb", country: "india", joiningDate: Date.now))
 }

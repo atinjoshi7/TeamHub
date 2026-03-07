@@ -10,7 +10,7 @@ import UIKit
 
 struct HomeView: View {
     
-    @StateObject private var vm: HomeViewModel 
+    @StateObject private var vm: HomeViewModel
     @State private var showFilterSheet = false
     @FocusState private var isSearchFocused:Bool
     @EnvironmentObject private var networkStatus : NetworkMonitor
@@ -32,6 +32,7 @@ struct HomeView: View {
                 NoInternetView()
             }else{
                 VStack(spacing: 0){
+                    // search bar
                     CustomSearchBar(text: $vm.searchText, placeHolder: "Search employees", isFocused: $isSearchFocused)
                         .padding(.bottom,10)
                     
@@ -42,12 +43,14 @@ struct HomeView: View {
                         }
                        
                         List {
-                            
+                            // Shimmer Effect when user data is getting fetched.
                             if vm.employees.isEmpty && vm.isLoading {
                                 ForEach(0..<10, id: \.self) { _ in
                                     EmployeeRowShimmerView()
                                 }
-                            } else {
+                            }
+                            /*Employee list after filtering the employee list*/
+                            else {
                                 ForEach(vm.filteredEmployees) { employee in
                                     EmployeeRowView(employee: employee)
                                         .contentShape(Rectangle())
@@ -64,13 +67,13 @@ struct HomeView: View {
                             print("refreshed data")
                             await vm.load(forceRefresh: true)
                         }
+                        .listStyle(.plain)
                     }
                 }
-                
-                .listStyle(.plain)
                 .navigationTitle("Employees")
                 .navigationBarTitleDisplayMode(.large)
                 .toolbar {
+                    /* HomeToolBarView is handling the filter and dark/light mode */
                     HomeToolBarView(
                         showFilterSheet: $showFilterSheet,
                         filter: vm.filter,
@@ -78,7 +81,6 @@ struct HomeView: View {
                         isSearchFocused = false
                     }
                 }
-                
                 .sheet(isPresented: $showFilterSheet) {
                     EmployeeFilterSheetView(
                         departments: vm.availableDepartments,
@@ -113,6 +115,7 @@ struct HomeView: View {
                     .animation(.spring(), value: showConnectivityBanner)
             }
         }
+        // Checks the internet connection.
         .onChange(of: networkStatus.isConnected){
             status in
             if status == false {
