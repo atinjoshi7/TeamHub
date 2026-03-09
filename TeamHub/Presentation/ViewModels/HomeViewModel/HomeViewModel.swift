@@ -8,13 +8,6 @@
 import Foundation
 import Combine
 
-enum HomeViewState {
-    case loading
-        case noInternet
-        case filteredEmpty
-        case data([Employee])
- 
-}
 
 @MainActor
 final class HomeViewModel: ObservableObject {
@@ -31,27 +24,6 @@ final class HomeViewModel: ObservableObject {
     init(getEmployeesFromRepository: EmployeeRepository) {
         self.getEmployeesFromRepository = getEmployeesFromRepository
     }
-    
-    var viewState: HomeViewState {
-        
-        // No Internet (only when no cached data)
-        if employees.isEmpty && isLoading == false && errorMessage == AppError.noInternet.localizedDescription {
-            return .noInternet
-        }
-        
-        // Initial loading
-        if employees.isEmpty && isLoading {
-            return .loading
-        }
-        
-        // Search empty result
-        if filteredEmployees.isEmpty && searchText.isEmpty == false {
-            return .filteredEmpty
-        }
-    
-        return .data(filteredEmployees)
-    }
-    
     
     var availableDepartments: [String] {
         Array(Set(employees.map { $0.department}))
