@@ -9,5 +9,6 @@ import Foundation
 
 
 protocol EmployeeRepository {
+    var newEmployeesCount: Int { get }
     func getEmployees(forceRefresh: Bool) async throws -> [Employee]
 }

@@ -30,7 +30,7 @@ final class AppDIContainer {
        
     // ViewModels
     func makeHomeViewModel() -> HomeViewModel {
-        HomeViewModel(getEmployeesFromRepository: repository)
+        HomeViewModel(getEmployeesFromRepository: repository, networkMonitor: networkMonitor)
     }
     
     // MARK: - Network Start

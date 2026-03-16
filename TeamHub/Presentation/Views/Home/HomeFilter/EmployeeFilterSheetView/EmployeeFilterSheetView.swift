@@ -39,7 +39,7 @@ struct EmployeeFilterSheetView: View {
         if colorScheme == .dark {
             return Color.white.opacity(0.15)
         } else {
-            return Color.accentColor.opacity(0.15)
+            return Color.blue.opacity(0.15)
         }
     }
 

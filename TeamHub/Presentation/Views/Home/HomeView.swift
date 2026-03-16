@@ -35,6 +35,31 @@ struct HomeView: View {
                     // search bar
                     CustomSearchBar(text: $vm.searchText, placeHolder: "Search employees", isFocused: $isSearchFocused)
                         .padding(.bottom,10)
+                    // NEW EMPLOYEE BANNER
+                      if vm.newEmployeesCount > 0 {
+
+                          HStack {
+
+                              Text("\(vm.newEmployeesCount) new employee added")
+                                  .font(.subheadline)
+                                  .fontWeight(.medium)
+
+                              Spacer()
+
+                              Button {
+                                  Task {
+                                      await vm.load(forceRefresh: true)
+                                  }
+                              } label: {
+                                  Image(systemName: "arrow.clockwise.circle.fill")
+                                      .font(.title2)
+                              }
+
+                          }
+                          .padding(.horizontal)
+                          .padding(.vertical, 10)
+                          .background(Color.green.opacity(0.15))
+                      }
                     
                     ZStack{
                         // If no user found after search/filter.
@@ -42,32 +67,33 @@ struct HomeView: View {
                             NoUserFound()
                         }
                        
-                        List {
-                            // Shimmer Effect when user data is getting fetched.
-                            if vm.employees.isEmpty && vm.isLoading {
-                                ForEach(0..<10, id: \.self) { _ in
-                                    EmployeeRowShimmerView()
+                            List {
+                                // Shimmer Effect when user data is getting fetched.
+                                if vm.employees.isEmpty && vm.isLoading {
+                                    ForEach(0..<10, id: \.self) { _ in
+                                        EmployeeRowShimmerView()
+                                    }
                                 }
-                            }
-                            /*Employee list after filtering the employee list*/
-                            else {
-                                ForEach(vm.filteredEmployees) { employee in
-                                    EmployeeRowView(employee: employee)
-                                        .contentShape(Rectangle())
-                                        .onTapGesture {
-                                            path.append(employee)
-                                        }
+                                /*Employee list after filtering the employee list*/
+                                else {
+                                    ForEach(vm.filteredEmployees) { employee in
+                                        EmployeeRowView(employee: employee)
+                                            .contentShape(Rectangle())
+                                            .onTapGesture {
+                                                path.append(employee)
+                                            }
+                                    }
+                                    
                                 }
                                 
                             }
-                            
-                        }
-                        .scrollDismissesKeyboard(.immediately)
-                        .refreshable {
-                            print("refreshed data")
-                            await vm.load(forceRefresh: true)
-                        }
-                        .listStyle(.plain)
+                            .scrollDismissesKeyboard(.immediately)
+                            .refreshable {
+                                print("refreshed data")
+                                await vm.load(forceRefresh: true)
+                            }
+                            .listStyle(.plain)
+                        
                     }
                 }
                 .navigationTitle("Employees")
@@ -136,9 +162,16 @@ struct HomeView: View {
                 
             }
         }
+        
         .task(id: "Load only once"){
             print("Fix fetched")
             await vm.load(forceRefresh: false)
+        }
+        .task {
+            while true {
+                try? await Task.sleep(nanoseconds: 5_00_000_000)
+                await vm.load(forceRefresh: false)
+            }
         }
     }
     

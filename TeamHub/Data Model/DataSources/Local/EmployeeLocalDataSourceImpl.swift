@@ -65,6 +65,7 @@ final class EmployeeLocalDataSourceImpl: EmployeeLocalDataSource {
                 entity.city = employee.city
                 entity.country = employee.country
                 entity.joiningDate = employee.joiningDate
+                // timestamp
                 
             } else {
                 // Insert new
@@ -85,7 +86,6 @@ final class EmployeeLocalDataSourceImpl: EmployeeLocalDataSource {
         
         // Delete employees not in API anymore
         let idsToDelete = existingIDs.subtracting(incomingIDs)
-        
         if idsToDelete.isEmpty == false {
             for id in idsToDelete {
                 if let entity = existingByID[id] {
@@ -100,8 +100,9 @@ final class EmployeeLocalDataSourceImpl: EmployeeLocalDataSource {
     
     func fetchEmployees() throws -> [Employee] {
         let request = NSFetchRequest<EmployeeEntity>(entityName: "EmployeeEntity")
-        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        
+//        request.fetchLimit = limit
+//        request.fetchOffset = offset
+        request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: false)]
         let result = try stack.context.fetch(request)
         return result.map { $0.toDomain() }
     }

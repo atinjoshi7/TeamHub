@@ -38,6 +38,10 @@ struct EmployeeRowView: View {
                 }else {
                     // This block gets executed when url is nil.
                     AvatarPlaceholderView(size: 62)
+                        .overlay{
+                            Circle()
+                                .stroke(themeManager.isDarkMode ? Color.white : Color.black,lineWidth: 1.5)
+                        }
                 }
                 
                 VStack(alignment: .leading, spacing: 4) {
